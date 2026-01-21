@@ -1,5 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { CopyMarkdownButton } from "@/components/copy-markdown-button";
+import { promises as fs } from "fs";
+import path from "path";
 
 export const metadata: Metadata = {
   title: "Integrating Contentful with Next.js 16 Cache Components",
@@ -21,13 +24,19 @@ function InlineCode({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function GuidePage() {
+export default async function GuidePage() {
+  const markdownPath = path.join(process.cwd(), "guide-revised.md");
+  const markdown = await fs.readFile(markdownPath, "utf-8");
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <article className="prose prose-zinc max-w-none">
-        <h1 className="text-4xl font-bold tracking-tight">
-          Integrating Contentful with Next.js 16 Cache Components
-        </h1>
+        <div className="mb-8 flex items-center justify-between">
+          <h1 className="m-0 text-4xl font-bold tracking-tight">
+            Integrating Contentful with Next.js 16 Cache Components
+          </h1>
+          <CopyMarkdownButton markdown={markdown} />
+        </div>
 
         <p className="mt-6 text-lg text-zinc-600">
           Next.js 16 ships with Cache Components: a way to control caching at the component level
