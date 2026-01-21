@@ -373,8 +373,6 @@ This changes the model. You invalidate only what changed instead of rebuilding t
 ```tsx
 // app/articles/[slug]/page.tsx
 export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
-  const { slug } = await props.params;
-
   return (
     <main className="mx-auto max-w-4xl px-6 py-16">
       <nav className="mb-12 flex items-center justify-between text-sm">
@@ -389,8 +387,9 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           <Views params={props.params} /> {/* Fetches per request, streams in */}
         </Suspense>
       </nav>
-      <TrackView slug={slug} />
-      <ArticleContent slug={slug} /> {/* Cached via "use cache" in getArticles() */}
+      <Suspense fallback={<ArticleContentSkeleton />}>
+        <ArticleContent params={props.params} /> {/* Cached via "use cache" in getArticles() */}
+      </Suspense>
     </main>
   );
 }
