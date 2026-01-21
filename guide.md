@@ -17,7 +17,7 @@ This guide walks through the three rendering strategies you can use in Next.js. 
 3. **Mixed (Cache Components)** - Fast and fresh
 
 The full source lives on GitHub and this guide starts from the `dynamic` branch:
-[https://github.com/vercel-partner-solutions/nextjs-16-contentful-guide](https://github.com/vercel-partner-solutions/nextjs-16-contentful-guide)
+[https://github.com/vercel-partner-solutions/nextjs-16-contentful-guide](https://github.com/vercel-labs/template-contentful-next)
 
 ---
 
@@ -38,7 +38,7 @@ We start with a fully dynamic version of the site. Then we add static generation
 ### 1. Clone the starter
 
 ```bash
-npx create-next-app@latest my-contentful-app --example "https://github.com/vercel-partner-solutions/nextjs-16-contentful-starter/tree/dynamic"
+npx create-next-app@latest my-contentful-app --example "https://github.com/vercel-labs/template-contentful-next"
 cd my-contentful-app
 ```
 
