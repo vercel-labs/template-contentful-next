@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 interface CopyMarkdownButtonProps {
   markdown: string;
@@ -17,11 +16,9 @@ export function CopyMarkdownButton({ markdown }: CopyMarkdownButtonProps) {
   };
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
+    <button
       onClick={handleCopy}
-      className="gap-2"
+      className="inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
     >
       {copied ? (
         <>
@@ -59,6 +56,6 @@ export function CopyMarkdownButton({ markdown }: CopyMarkdownButtonProps) {
           Copy as Markdown
         </>
       )}
-    </Button>
+    </button>
   );
 }
