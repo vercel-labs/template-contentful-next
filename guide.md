@@ -372,21 +372,31 @@ This changes the model. You invalidate only what changed instead of rebuilding t
 
 ```tsx
 // app/articles/[slug]/page.tsx
-export default async function ArticlePage({ params }) {
-  const { slug } = await params;
+export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
+  const { slug } = await props.params;
 
   return (
-    <article>
-      <Link href="/">← Back</Link>
-      <Suspense fallback={<ViewsSkeleton />}>
-        <Views params={params} /> {/* Fetches per request, streams in */}
-      </Suspense>
+    <main className="mx-auto max-w-4xl px-6 py-16">
+      <nav className="mb-12 flex items-center justify-between text-sm">
+        <Link
+          href="/"
+          className="group inline-flex items-center gap-1.5 text-black/50 transition-colors hover:text-black"
+        >
+          <span className="transition-transform group-hover:-translate-x-0.5">←</span>
+          <span>All articles</span>
+        </Link>
+        <Suspense fallback={<ViewsSkeleton />}>
+          <Views params={props.params} /> {/* Fetches per request, streams in */}
+        </Suspense>
+      </nav>
       <TrackView slug={slug} />
       <ArticleContent slug={slug} /> {/* Cached via "use cache" in getArticles() */}
-    </article>
+    </main>
   );
 }
 ```
+
+> Note: If a slug was not pre-rendered at build time, Next.js can still generate it on-demand and cache it (ISR-style). You do **not** need `<Suspense>` for `ArticleContent` in this setup because its Contentful data is cached via `"use cache"`. Keep `<Suspense>` for truly request-time data like `Views`.
 
 What you get:
 
