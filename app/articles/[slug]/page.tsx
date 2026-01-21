@@ -7,6 +7,11 @@ import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 import { TrackView } from "@/components/track-view";
 
+export async function generateStaticParams() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ slug: article.slug }));
+}
+
 export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
   return (
     <main className="mx-auto max-w-4xl px-6 py-16">
