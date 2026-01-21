@@ -31,7 +31,7 @@ export default async function GuidePage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <article className="prose prose-zinc max-w-none">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex items-start justify-between gap-6">
           <h1 className="m-0 text-4xl font-bold tracking-tight">
             Integrating Contentful with Next.js 16 Cache Components
           </h1>
