@@ -356,7 +356,10 @@ export const getArticles = async (query?: ArticleQuery) => {
   const entries = extractArticleFields(entriesResult);
   // We use an array so cacheTag includes all articles returned.
   // If any article changes, we can invalidate all caches that include that article.
-  cacheTag(...entries.map((entry) => entry.id));
+  const tags = entries.map((entry) => entry.id);
+  if (tags.length > 0) {
+    cacheTag(...tags);
+  }
   return entries;
 };
 ```
