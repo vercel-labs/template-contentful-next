@@ -220,11 +220,9 @@ If your content updates once a week, fetching it on every request is wasted effo
 
 ## Part 2: Static rendering
 
-So you try static generation. It's the obvious next step: cache the content once, serve it fast everywhere.
+Dynamic rendering wastes effort when content barely changes. Static generation is the obvious fix: pre-render pages at build time and serve them from the CDN.
 
-It works—until the first time someone publishes and expects the site to update.
-
-To avoid refetching content that didn't change, Next.js supports static generation via `generateStaticParams`. This pre-renders pages at build time instead of on every request.
+Next.js supports this via `generateStaticParams`, which tells the framework which paths to generate ahead of time.
 
 ### Generate static paths
 
@@ -250,15 +248,11 @@ Next.js generates HTML for every article and serves it from the CDN.
 
 ### The problems
 
-**Content updates require rebuilds.** An editor publishes an article and nothing changes until you redeploy. For content sites, that lag hurts.
+Static generation works—until the first time someone publishes and expects the site to update.
 
-**Dynamic features freeze.** The view counter locks in at build time. Every user sees the same stale number.
+**Content goes stale.** An editor publishes an article and nothing changes until you redeploy. For content sites, that lag hurts.
 
-Yes, you can hydrate the counter on the client. But now you trade server simplicity for client complexity:
-
-- Layout shift
-- Hydration mismatches
-- Extra API calls
+**Dynamic features freeze.** The view counter locks in at build time. Every user sees the same stale number. You can hydrate the counter on the client, but now you trade server simplicity for client complexity: layout shift, hydration mismatches, extra API calls.
 
 ### The workaround (and why it still loses)
 
