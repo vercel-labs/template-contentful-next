@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const entryId = body?.sys?.id;
 
-  if (!entryId) {
-    return NextResponse.json({ message: "Missing entry ID" }, { status: 400 });
+  if (!entryId || typeof entryId !== "string") {
+    return NextResponse.json({ message: "Missing or invalid entry ID" }, { status: 400 });
   }
 
   revalidateTag(entryId, "max");
