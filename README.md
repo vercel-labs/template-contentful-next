@@ -2,7 +2,7 @@
 
 A starter template demonstrating three rendering strategies in Next.js 16 with Contentful as the content source.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Ftemplate-contentful-next&env=CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN,CONTENTFUL_PREVIEW_ACCESS_TOKEN,CONTENTFUL_REVALIDATE_SECRET)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Ftemplate-contentful-next&env=CONTENTFUL_SPACE_ID,CONTENTFUL_ACCESS_TOKEN,CONTENTFUL_REVALIDATE_SECRET)
 
 ## The Problem
 
@@ -39,7 +39,6 @@ The setup wizard creates a Contentful space, configures the content model, and w
 ```bash
 CONTENTFUL_SPACE_ID=<your space id>
 CONTENTFUL_ACCESS_TOKEN=<delivery api token>
-CONTENTFUL_PREVIEW_ACCESS_TOKEN=<preview api token>
 CONTENTFUL_REVALIDATE_SECRET=<secret for webhook revalidation>
 REDIS_URL=<optional, for view counts>
 ```

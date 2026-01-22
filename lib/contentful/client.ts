@@ -12,15 +12,11 @@ export const getContentfulClient = (isDraft?: boolean) => {
     return clientCache[cacheKey];
   }
 
-  const accessToken = isDraft
-    ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
-    : process.env.CONTENTFUL_ACCESS_TOKEN;
+  const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
   if (!accessToken) {
     throw new Error(
-      isDraft
-        ? "CONTENTFUL_PREVIEW_ACCESS_TOKEN must be set"
-        : "CONTENTFUL_ACCESS_TOKEN must be set"
+      "CONTENTFUL_ACCESS_TOKEN must be set"
     );
   }
   if (!process.env.CONTENTFUL_SPACE_ID) {

@@ -17,7 +17,7 @@ This guide walks through the three rendering strategies you can use in Next.js. 
 3. **Mixed (Cache Components)** - Fast and fresh
 
 The full source lives on GitHub and this guide starts from the `dynamic` branch:
-[https://github.com/vercel-partner-solutions/nextjs-16-contentful-guide](https://github.com/vercel-labs/template-contentful-next)
+[https://github.com/vercel-labs/template-contentful-next](https://github.com/vercel-labs/template-contentful-next)
 
 ---
 
@@ -74,6 +74,9 @@ Create `.env.local`:
 ```bash
 CONTENTFUL_SPACE_ID=your_space_id
 CONTENTFUL_ACCESS_TOKEN=your_delivery_token
+
+# Optional (only needed for `pnpm setup-contentful`)
+# Create one at: https://app.contentful.com/account/profile/cma_tokens
 CONTENTFUL_MANAGEMENT_TOKEN=your_management_token
 ```
 
@@ -491,7 +494,6 @@ Add these environment variables:
 
 - `CONTENTFUL_SPACE_ID`
 - `CONTENTFUL_ACCESS_TOKEN`
-- `CONTENTFUL_PREVIEW_ACCESS_TOKEN`
 - `CONTENTFUL_REVALIDATE_SECRET`
 - `REDIS_URL` (optional)
 
