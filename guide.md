@@ -202,6 +202,8 @@ export function ViewsSkeleton() {
 
 export async function Views({ params }: ViewsProps) {
   const resolvedParams = await params;
+  // NOTE: `getViews()` uses Redis when `REDIS_URL` is set. Otherwise it returns a placeholder
+  // value (so this template works without extra setup).
   const views = await getViews(resolvedParams.slug);
 
   return <span className="text-black/50 tabular-nums">{views.toLocaleString()} views</span>;
@@ -321,7 +323,7 @@ const nextConfig = {
   cacheComponents: true,
 
   // ...the rest of your config
-};
+} satisfies NextConfig;
 
 export default nextConfig;
 ```

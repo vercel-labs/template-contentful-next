@@ -24,11 +24,11 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           <span>All articles</span>
         </Link>
         <Suspense fallback={<ViewsSkeleton />}>
-          <Views params={props.params} />
+          <Views params={props.params} /> {/* Fetches per request, streams in */}
         </Suspense>
       </nav>
       <Suspense fallback={<ArticleContentSkeleton />}>
-        <ArticleContent params={props.params} />
+        <ArticleContent params={props.params} /> {/* Cached via "use cache" in getArticles() */}
       </Suspense>
     </main>
   );
