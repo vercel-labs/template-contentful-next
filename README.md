@@ -17,11 +17,11 @@ Cache Components in Next.js 16 break this tradeoff. You cache the stable parts (
 
 This repo includes three branches, each demonstrating a different rendering strategy:
 
-| Branch | Rendering | Description |
-|--------|-----------|-------------|
-| `main` | Dynamic | Fresh content on every request |
-| `static` | Static (SSG) | Pre-rendered at build time with `generateStaticParams` |
-| `cache-components` | Mixed | Cached content + dynamic views via Cache Components |
+| Branch             | Rendering    | Description                                            |
+| ------------------ | ------------ | ------------------------------------------------------ |
+| `main`             | Dynamic      | Fresh content on every request                         |
+| `static`           | Static (SSG) | Pre-rendered at build time with `generateStaticParams` |
+| `cache-components` | Mixed        | Cached content + dynamic views via Cache Components    |
 
 ## Quick Start
 

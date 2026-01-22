@@ -12,29 +12,29 @@
     "setup-contentful": "node --no-warnings scripts/setup.mjs"
   },
   "dependencies": {
-    "@contentful/rich-text-react-renderer": "^16.1.5",
-    "contentful": "^11.9.0",
-    "next": "16.1.1",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "@contentful/rich-text-react-renderer": "^16.1.6",
+    "contentful": "^11.10.2",
+    "next": "latest",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "redis": "^5.10.0"
   },
   "devDependencies": {
     "@clack/prompts": "^0.11.0",
     "@contentful/rich-text-types": "^17.2.5",
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^24.10.9",
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "contentful-management": "^11.44.0",
-    "dotenv": "^16.4.5",
-    "eslint": "^9",
+    "contentful-management": "^11.68.0",
+    "dotenv": "^16.6.1",
+    "eslint": "^9.39.2",
     "eslint-config-next": "latest",
     "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.1.17",
-    "typescript": "^5"
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
   }
 }
