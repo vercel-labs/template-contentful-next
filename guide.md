@@ -400,7 +400,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 }
 ```
 
-> Note: If a slug was not pre-rendered at build time, Next.js can still generate it on-demand and cache it (ISR-style). You do **not** need `<Suspense>` for `ArticleContent` in this setup because its Contentful data is cached via `"use cache"`. Keep `<Suspense>` for truly request-time data like `Views`.
+> Note: If a slug was not pre-rendered at build time, Next.js can still generate it on-demand and cache it (ISR-style). In that case, visitors will briefly see the `<Suspense>` fallback while the page is generated.
 
 What you get:
 
