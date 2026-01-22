@@ -38,7 +38,7 @@ We start with a fully dynamic version of the site. Then we add static generation
 ### 1. Clone the starter
 
 ```bash
-npx create-next-app@latest my-contentful-app --example "https://github.com/vercel-labs/template-contentful-next"
+npx create-next-app@latest my-contentful-app --example "https://github.com/vercel-labs/template-contentful-next/tree/dynamic"
 cd my-contentful-app
 ```
 
