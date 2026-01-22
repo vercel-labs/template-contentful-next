@@ -15,9 +15,7 @@ export const getContentfulClient = (isDraft?: boolean) => {
   const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
   if (!accessToken) {
-    throw new Error(
-      "CONTENTFUL_ACCESS_TOKEN must be set"
-    );
+    throw new Error("CONTENTFUL_ACCESS_TOKEN must be set");
   }
   if (!process.env.CONTENTFUL_SPACE_ID) {
     throw new Error("CONTENTFUL_SPACE_ID must be set");
