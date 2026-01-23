@@ -340,45 +340,26 @@ If you do neither, Next.js throws an error like: `Uncached data was accessed out
 
 That constraint forces you to be explicit about caching intent.
 
-To enable proper data access, cache your `getArticles` query. That lets you keep Contentful content cached while keeping view count data dynamic on the same page.
+### Cache home page content
 
-### Cache Contentful queries
+Let's begin by adding caching to our home page. We can easily add the `use cache` directive to the top of our `<Articles />` component.
 
-```ts
-// lib/contentful/queries.ts
-import { cacheTag } from "next/cache";
-import { getContentfulClient } from "./client";
-import { ArticleQuery, ArticleSkeleton, CONTENT_TYPE_IDS } from "./types";
-import { extractArticleFields } from "./utils";
-
-export const getArticles = async (query?: ArticleQuery) => {
+```jsx
+async function Articles() {
   "use cache";
-  const client = getContentfulClient();
-  const entriesResult = await client.withoutUnresolvableLinks.getEntries<ArticleSkeleton>({
-    content_type: CONTENT_TYPE_IDS.ARTICLE,
-    ...query,
-  });
-  const entries = extractArticleFields(entriesResult);
-  // We use an array so cacheTag includes all articles returned.
-  // If any article changes, we can invalidate all caches that include that article.
-  const tags = entries.map((entry) => entry.id);
-  if (tags.length > 0) {
-    cacheTag(...tags);
-  }
-  return entries;
-};
+  const articles = await getArticles();
+
+  // the rest our our component remains unchanged
+}
 ```
 
-Two key things happen here:
-
-1. `"use cache"` caches the function’s return value in the static shell
-2. `cacheTag()` tags the cache with entry IDs for granular invalidation
-
-This changes the model. You invalidate only what changed instead of rebuilding the whole site.
+The content on your home page may or may not need to change frequently based on your use case. That is why Next.js also allows you use `cacheLife` to configure the cache policy that works best for you. If none is provided Next.js will use the default profile. You can learn more about these profiles [here](https://nextjs.org/docs/app/api-reference/functions/cacheLife#preset-cache-profiles).
 
 ### Mix cached and dynamic content
 
-```tsx
+Our article detail page uses dynamic data in the `<Views>` component, and static content in the `<ArticleContent>` component. Cache Components makes it easy to mix these strategies on a single page. Start by removing the `<Suspense>` boundary around the `ArticleContent` component.
+
+```jsx
 // app/articles/[slug]/page.tsx
 export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
   return (
@@ -395,15 +376,57 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           <Views params={props.params} /> {/* Fetches per request, streams in */}
         </Suspense>
       </nav>
-      <Suspense fallback={<ArticleContentSkeleton />}>
-        <ArticleContent params={props.params} /> {/* Cached via "use cache" in getArticles() */}
-      </Suspense>
+        <ArticleContent params={props.params} /> {/* Cached via "use cache" */}
     </main>
   );
 }
 ```
 
-> Note: If a slug was not pre-rendered at build time, Next.js can still generate it on-demand and cache it (ISR-style). In that case, visitors will briefly see the `<Suspense>` fallback while the page is generated.
+Now if you run your development server you will see this error: `Data that blocks navigation was accessed outside of <Suspense>`. This is Next.js way of warning us that that we are accessing dynamic data incorrectly. To fix this, we can add `use cache` to our `<ArticleContent>` component which tells Next.js that we want to cache this component.
+
+```jsx
+async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
+  "use cache";
+  const params = await props.params;
+
+  const article = await getArticles({
+    "fields.slug": params.slug,
+    limit: 1,
+  });
+
+  // the rest of our component remains unchanged
+}
+```
+
+We also want to support on-demand revalidation for our article content. This allows us to revalidate cache tags when a user hits `Publish` inside of Contentful. Before Cache Components we had to define all of our cache tags _before_ fetching our content, but with the new `cacheTag` API we can call it _afterwards_. This is a huge win for developers. We can:
+
+1. Fetch our content
+2. Create a unique cache tag based on the response
+3. Create a simple revalidate function to handle webhhooks
+
+Let's add a cache tag to the `ArticleContent` based on the `sys.id` of Contentful entry. This ID is a unique value assigned to every piece of content in Contentful. We purposefully choose this value over the `slug` since you may run into a scenario where you want to change the `slug` or add redirects. Next.js recommends pairing on-demand revalidation with the `'max'` cache profile for best performance.
+
+````jsx
+async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
+ "use cache";
+  const params = await props.params;
+
+  const articles = await getArticles({
+   "fields.slug": params.slug,
+    limit: 1,
+  });
+
+  if (!articles || articles.length === 0) {
+    notFound();
+  }
+
+  cacheTag(articles[0].id);
+  cacheLife("max");
+
+  // the rest of our component remains unchanged
+}
+
+> Note: If a slug was not pre-rendered at build time, Next.js can still generate it on-demand and cache it (ISR-style).
 
 What you get:
 
@@ -431,7 +454,7 @@ Protect the endpoint with a secret.
 
 ```bash
 openssl rand -base64 32
-```
+````
 
 Add it to `.env.local`:
 
