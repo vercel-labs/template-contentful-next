@@ -270,7 +270,7 @@ Yes, you can hydrate the counter on the client. But now you trade server simplic
 - Hydration mismatches
 - Extra API calls
 
-### The workaround (and why it still loses)
+### The wrong workaround
 
 You might think: wrap the view counter in `unstable_cache()` with `revalidate: 0` so it stays fresh. It is technically possible:
 
