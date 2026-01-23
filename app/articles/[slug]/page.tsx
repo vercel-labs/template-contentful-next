@@ -6,6 +6,7 @@ import { RichText } from "@/components/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 import { TrackView } from "@/components/track-view";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateStaticParams() {
   const articles = await getArticles();
@@ -27,25 +28,28 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           <Views params={props.params} /> {/* Fetches per request, streams in */}
         </Suspense>
       </nav>
-      <Suspense fallback={<ArticleContentSkeleton />}>
-        <ArticleContent params={props.params} /> {/* Cached via "use cache" in getArticles() */}
-      </Suspense>
+      <ArticleContent params={props.params} /> {/* Cached via "use cache" */}
     </main>
   );
 }
 
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
+  "use cache";
   const params = await props.params;
-  const article = await getArticles({
+
+  const articles = await getArticles({
     "fields.slug": params.slug,
     limit: 1,
   });
 
-  if (!article || article.length === 0) {
+  if (!articles || articles.length === 0) {
     notFound();
   }
 
-  const { title, categoryName, authorName, summary, details, articleImage } = article[0];
+  cacheTag(articles[0].id);
+  cacheLife("max");
+
+  const { title, categoryName, authorName, summary, details, articleImage } = articles[0];
 
   return (
     <article>
@@ -83,36 +87,6 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
       >
         <RichText content={details} />
       </div>
-    </article>
-  );
-}
-
-function ArticleContentSkeleton() {
-  return (
-    <article>
-      <div className="mb-8 flex items-center gap-4">
-        <span className="inline-block animate-pulse bg-black/10 px-3 py-1 text-xs font-semibold tracking-wide text-transparent uppercase">
-          Category
-        </span>
-      </div>
-
-      <h1 className="mb-6 animate-pulse rounded bg-black/10 text-5xl leading-tight font-semibold text-transparent">
-        Article Title
-      </h1>
-
-      <div className="mb-12 flex items-center gap-3 text-lg">
-        <span className="animate-pulse rounded bg-black/10 text-transparent">By Author Name</span>
-      </div>
-
-      <div className="relative mb-12 aspect-2/1 w-full animate-pulse overflow-hidden border border-black/5 bg-black/5 shadow-sm" />
-
-      <div className="mb-12 border-b border-black/10 pb-12">
-        <p className="animate-pulse rounded bg-black/10 text-xl leading-relaxed font-medium text-transparent">
-          This is a placeholder for the article summary that spans multiple lines of text content.
-        </p>
-      </div>
-
-      <div className="h-64 max-w-none animate-pulse rounded bg-black/5" />
     </article>
   );
 }

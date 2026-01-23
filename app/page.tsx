@@ -11,6 +11,7 @@ export default function Home() {
 }
 
 async function Articles() {
+  "use cache";
   const articles = await getArticles();
 
   return (
