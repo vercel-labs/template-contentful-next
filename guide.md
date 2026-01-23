@@ -406,7 +406,7 @@ We also want to support on-demand revalidation for our article content. This all
 
 Let's add a cache tag to the `ArticleContent` based on the `sys.id` of Contentful entry. This ID is a unique value assigned to every piece of content in Contentful. We purposefully choose this value over the `slug` since you may run into a scenario where you want to change the `slug` or add redirects. Next.js recommends pairing on-demand revalidation with the `'max'` cache profile for best performance.
 
-````jsx
+```jsx
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
  "use cache";
   const params = await props.params;
@@ -425,6 +425,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
 
   // the rest of our component remains unchanged
 }
+```
 
 > Note: If a slug was not pre-rendered at build time, Next.js can still generate it on-demand and cache it (ISR-style).
 
@@ -454,7 +455,7 @@ Protect the endpoint with a secret.
 
 ```bash
 openssl rand -base64 32
-````
+```
 
 Add it to `.env.local`:
 
