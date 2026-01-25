@@ -398,7 +398,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
 }
 ```
 
-We also want to support on-demand revalidation for our article content. This allows us to revalidate cache tags when a user hits `Publish` inside of Contentful. Before Cache Components we had to define all of our cache tags _before_ fetching our content, but with the new `cacheTag` API we can call it _afterwards_. This is a huge win for developers. We can:
+We also want to support on-demand revalidation for our article content. This allows us to revalidate cache tags when a user hits `Publish` inside of Contentful. Before Cache Components we had to define all of our cache tags _before_ fetching our content, but with the new `cacheTag` API we can call it _afterwards_. This is a huge win for developers and marketers. We can:
 
 1. Fetch our content
 2. Create a unique cache tag based on the response
