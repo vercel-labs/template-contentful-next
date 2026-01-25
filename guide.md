@@ -353,7 +353,7 @@ async function Articles() {
 }
 ```
 
-The content on your home page may or may not need to change frequently based on your use case. That is why Next.js also allows you use `cacheLife` to configure the cache policy that works best for you. If none is provided Next.js will use the default profile. You can learn more about these profiles [here](https://nextjs.org/docs/app/api-reference/functions/cacheLife#preset-cache-profiles).
+Your home page content might change frequently, or it might stay static for weeks. Next.js gives you `cacheLife` to configure the cache policy that best fits your specific needs. Learn more <a href="https://nextjs.org/docs/app/api-reference/functions/cacheLife#preset-cache-profiles">here</a>.
 
 ### Mix cached and dynamic content
 
