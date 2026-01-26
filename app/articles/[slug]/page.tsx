@@ -6,7 +6,6 @@ import { RichText } from "@/components/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 import { TrackView } from "@/components/track-view";
-import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateStaticParams() {
   const articles = await getArticles();
