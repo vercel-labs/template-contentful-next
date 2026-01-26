@@ -499,13 +499,7 @@ Deploy.
 
 ## Summary
 
-You migrated a fully dynamic application to Cache Components. You now get granular cache invalidation and strong performance without sacrificing freshness.
-
-| Approach         | Speed | Freshness | Dynamic features |
-| ---------------- | ----- | --------- | ---------------- |
-| Dynamic          | Slow  | Fresh     | Works            |
-| Static           | Fast  | Stale     | Broken           |
-| Cache Components | Fast  | Fresh     | Works            |
+You migrated a fully dynamic application to Cache Components. You now get granular cache invalidation and strong performance without sacrificing the ability to immediately update your content.
 
 Cache Components eliminate the need to choose between performance and freshness. Your users get instant loading, your content editors get real-time publishing, and your development team stops rebuilding the entire site for every update.
 
