@@ -1,14 +1,14 @@
 # Integrating Contentful with Next.js 16 Cache Components
 
-Content teams traditionally had to choose between fast static sites and dynamic personalized experiences. Cache Components in Next.js 16 eliminate this tradeoff, letting you build sites that are both fast and personalized without sacrificing performance. Pair this with Contentful to serve content instantly while still reflecting updates right after an editor hits publish.
+Content teams traditionally had to choose between fast static sites and dynamic, personalized experiences. Cache Components in Next.js 16 eliminate this trade-off, letting you build sites that are both fast and personalized without sacrificing performance. Pair this with Contentful to serve content instantly while still reflecting updates as soon as an editor hits Publish.
 
-This guide walks through the three rendering strategies available in Next.js to teach the why and how behind Cache Components.
+This guide walks through three rendering strategies in Next.js to explain the why and how behind Cache Components.
 
-1. **Dynamic rendering** - Fresh content, slower pages
-2. **Static rendering** - Fast pages, stale content
-3. **Mixed (Cache Components)** - Fast pages and fresh content
+1. **Dynamic rendering** — Fresh content, slower pages
+2. **Static rendering** — Fast pages, stale content
+3. **Mixed (Cache Components)** — Fast pages and fresh content
 
-The full source lives on GitHub and this guide starts from the `dynamic` branch:
+The full source lives on GitHub, and this guide starts from the `dynamic` branch:
 [https://github.com/vercel-labs/template-contentful-next](https://github.com/vercel-labs/template-contentful-next)
 
 ---
@@ -27,27 +27,25 @@ The full source lives on GitHub and this guide starts from the `dynamic` branch:
 
 Start with a fully dynamic version of the application.
 
-### 1. Clone repo
+### 1. Clone the repo
 
 ```bash
 npx create-next-app@latest my-contentful-app --example "https://github.com/vercel-labs/template-contentful-next/tree/dynamic"
 cd my-contentful-app
 ```
 
-### 2. Run setup script
+### 2. Run the setup script
 
 ```bash
 pnpm setup-contentful
 ```
 
-The script creates a Contentful space, configures your content model, and writes credentials to `.env.local` to set up your development server.
+The script creates a Contentful space, configures your content model, and writes credentials to `.env.local` so you can start your development server.
 
-If you have issues with the script, follow the manual steps below.
+If you run into issues with the script, follow the manual steps below.
 
 <details>
 <summary><strong>Manual setup</strong></summary>
-
-If `pnpm setup-contentful` fails:
 
 #### Create a Contentful space
 
@@ -57,7 +55,7 @@ Go to [https://app.contentful.com/spaces/new](https://app.contentful.com/spaces/
 
 1. **Settings → API keys → Add API key**
 2. Copy the **Space ID** and **Content Delivery API access token**
-3. Go to CMA tokens and generate a personal token: [https://app.contentful.com/account/profile/cma_tokens](https://app.contentful.com/account/profile/cma_tokens)
+3. Go to **CMA tokens** and generate a personal token: [https://app.contentful.com/account/profile/cma_tokens](https://app.contentful.com/account/profile/cma_tokens)
 
 #### Configure environment
 
@@ -93,7 +91,7 @@ Add at least one Article entry and publish it.
 
 </details>
 
-Once setup finishes, your Contentful space should look like this:
+Once setup is complete, your Contentful space should look like this:
 
 ![Contentful screenshot](./public/images/start_contentful.png)
 
@@ -104,7 +102,7 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see your Next.js application. Your home page should look like this:
-![Homepage screenshot](./public/images/start_dev.png)
+![Home page screenshot](./public/images/start_dev.png)
 
 ---
 
@@ -112,7 +110,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your Next.js applicat
 
 Dynamic rendering is the simplest place to start. It also mirrors what many teams ship first: fetch on every request to show the latest content.
 
-### Homepage
+### Home page
 
 ```jsx
 // app/page.tsx
@@ -125,7 +123,7 @@ export default function Home() {
 }
 ```
 
-The homepage renders a single component named `<Articles />`, which uses the `getArticles` function to fetch from Contentful. Since `getArticles` runs without dynamic params, Next.js treats this route as static by default.
+The home page renders a single component named `<Articles />`, which uses the `getArticles` function to fetch from Contentful. Since `getArticles` runs without any dynamic params, Next.js treats this route as static by default.
 
 ### Article page
 
@@ -214,7 +212,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
 }
 ```
 
-The `Views` component also depends on the `[slug]` and reads real-time information from Redis.
+The `Views` component also depends on `[slug]` and reads real-time data from Redis.
 
 ### Views component
 
@@ -242,7 +240,7 @@ export async function Views({ params }: ViewsProps) {
 
 ### The problem
 
-This approach doesn't scale as traffic grows. The application hits the Contentful API on every request for articles that have not changed and introduces latency that harms the user experience and degrades core web vitals.
+This approach doesn't scale as traffic grows. The application hits the Contentful API on every request for articles that haven't changed, adding latency that harms user experience and degrades Core Web Vitals.
 
 ---
 
@@ -268,9 +266,9 @@ Now run `pnpm build`. Next.js generates static HTML for every article `slug` in 
 
 ### The problems
 
-This solved the latency issue of dynamic rendering, but introduced two new problems. Content was pre-rendered at build time, meaning it won't update when a user hits Publish in Contentful. The view counter was also pre-rendered, so it always shows a stale value.
+This solved the latency issue of dynamic rendering, but introduced two new problems. Content was pre-rendered at build time, so it won't update when a user hits Publish in Contentful. The view counter was also pre-rendered, so it always shows a stale value.
 
-You could try to hydrate the view counter on the client, but that has more tradeoffs:
+You could try to hydrate the view counter on the client, but that has more trade-offs:
 
 - Layout shift: The server sends initial HTML (often with a placeholder or stale value), then the client fetches the real data and updates the UI, causing visible content to jump around.
 - Hydration mismatches: If the server-rendered HTML differs from what React expects on the client (e.g., a counter showing "0" on server but "42" after hydration), React will warn and potentially re-render, hurting performance.
@@ -278,7 +276,7 @@ You could try to hydrate the view counter on the client, but that has more trade
 
 ### The wrong workaround
 
-You might think, wrap the view counter in `unstable_cache()` with `revalidate: 0` so it stays fresh which is technically possible.
+You might think: wrap the view counter in `unstable_cache()` with `revalidate: 0` so it stays fresh—which is technically possible.
 
 ```jsx
 // lib/redis.ts
@@ -305,13 +303,13 @@ export async function Views({ slug }: { slug: string }) {
 
 But `revalidate: 0` means the cache expires immediately, so every request still triggers a fetch. You pay for caching infrastructure and get zero caching benefit. You also add the complexity of `unstable_cache()` and manually coordinating cache tags.
 
-Most importantly, you still cannot mix rendering strategies on the same route. Articles want to cache for minutes or hours and views want to update every request. Static rendering is all-or-nothing, you cannot keep one part static while another part stays dynamic.
+Most importantly, you still can't mix rendering strategies on the same route. Articles want to cache for minutes or hours, and views want to update on every request. Static rendering is all-or-nothing; you can't keep one part static while another part stays dynamic.
 
 ---
 
-## Part 3: Cache Components
+## Cache Components
 
-Cache Components solves this problem by letting you mix rendering strategies on the same page. Static sections are delivered instantly from the cache, while dynamic sections stream in with `Suspense`.
+Cache Components solve this problem by letting you mix rendering strategies on the same page. Static sections are delivered instantly from the cache, while dynamic sections stream in with `Suspense`.
 
 ### Enable Cache Components
 
@@ -326,11 +324,11 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-With `cacheComponents` enabled, async components require either the `"use cache"` directive or must be wrapped in `<Suspense>`. Without one of these patterns, Next.js throws an error to help developers avoid performance issues.
+With `cacheComponents` enabled, async components require either the `"use cache"` directive or a `<Suspense>` boundary. Without one of these patterns, Next.js throws an error to help developers avoid performance issues.
 
 ### Cache home page content
 
-Add `use cache` to the top of the `<Articles>` component. Next.js caches the rendered output of the component, allowing it to statically render this page at build time.
+Add `"use cache"` to the top of the `<Articles>` component. Next.js caches the rendered output of the component, allowing it to statically render this page at build time.
 
 ```jsx
 async function Articles() {
@@ -342,7 +340,7 @@ async function Articles() {
 }
 ```
 
-Your home page content might change frequently, or it might stay static for weeks. Next.js provides `cacheLife` to configure the cache policy that best fits your specific needs. Learn more <a href="https://nextjs.org/docs/app/api-reference/functions/cacheLife#preset-cache-profiles">here</a>.
+Your home page content might change frequently, or it might stay static for weeks. Next.js provides `cacheLife` to configure the cache policy that best fits your needs. Learn more [here](https://nextjs.org/docs/app/api-reference/functions/cacheLife#preset-cache-profiles).
 
 ### Mix cached and dynamic content
 
@@ -365,13 +363,13 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           <Views params={props.params} /> {/* Fetches per request, streams in */}
         </Suspense>
       </nav>
-        <ArticleContent params={props.params} /> {/* Cached via "use cache" */}
+      <ArticleContent params={props.params} /> {/* Cached via "use cache" */}
     </main>
   );
 }
 ```
 
-Run your development server and you will see this error: `Data that blocks navigation was accessed outside of <Suspense>`.To fix this, add `use cache` to the `<ArticleContent>` component.
+Run your development server and you will see this error: `Data that blocks navigation was accessed outside of <Suspense>`. To fix it, add `"use cache"` to the `<ArticleContent>` component.
 
 ```jsx
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
@@ -387,17 +385,17 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
 }
 ```
 
-On-demand revalidation updates the page whenever a user hits Publish in Contentful. Before Cache Components, developers had to define cache tags prior to fetching content. The new `cacheTag` API allows defining them afterwards. Fetch the content, create a unique cache tag based on the response, and use webhooks to revalidate.
+On-demand revalidation updates the page whenever a user hits Publish in Contentful. Before Cache Components, developers had to define cache tags before fetching content. The new `cacheTag` API lets you define them afterward. Fetch the content, create a unique cache tag based on the response, and use webhooks to revalidate.
 
-Add a cache tag to the `ArticleContent` based on the `sys.id` of Contentful entry. This ID is a unique value assigned to every piece of content in Contentful. The sys.id is more stable than the slug, which may change or require redirects. Next.js recommends pairing on-demand revalidation with the `'max'` cache profile for best performance.
+Add a cache tag to `ArticleContent` based on the `sys.id` of the Contentful entry. This ID is a unique value assigned to every piece of content in Contentful. `sys.id` is more stable than the slug, which may change (and potentially require redirects). Next.js recommends pairing on-demand revalidation with the `'max'` cache profile for best performance.
 
 ```jsx
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
- "use cache";
+  "use cache";
   const params = await props.params;
 
   const articles = await getArticles({
-   "fields.slug": params.slug,
+    "fields.slug": params.slug,
     limit: 1,
   });
 
@@ -422,7 +420,7 @@ The static shell renders instantly, covering navigation, layout, and article con
 
 Use Contentful webhooks to notify your app about publish events. The webhook payload includes the entry `sys.id`, which you can use to invalidate any cached data tagged with that ID.
 
-Protect the endpoint with a secret.
+Protect the endpoint with a shared secret.
 
 ### Create a revalidation secret
 
