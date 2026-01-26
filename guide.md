@@ -242,7 +242,7 @@ export async function Views({ params }: ViewsProps) {
 
 ### The problem
 
-This approach doesn't scale as traffic grows. The applications hits the Contentful API on every request for articles that have not changed and introduce latency that harms the user experience and degrades core web vitals.
+This approach doesn't scale as traffic grows. The application hits the Contentful API on every request for articles that have not changed and introduces latency that harms the user experience and degrades core web vitals.
 
 ---
 
