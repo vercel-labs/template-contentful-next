@@ -342,7 +342,7 @@ That constraint forces you to be explicit about caching intent.
 
 ### Cache home page content
 
-To cache your home page, add use cache to the top of your component. Next.js caches the rendered output of the component, allowing it to statically render this page at build time.
+To cache your home page, add `use cache` to the top of your component. Next.js caches the rendered output of the component, allowing it to statically render this page at build time.
 
 ```jsx
 async function Articles() {
