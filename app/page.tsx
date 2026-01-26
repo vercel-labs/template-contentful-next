@@ -1,6 +1,7 @@
 import { getArticles } from "@/lib/contentful/queries";
 import { ContentfulImage } from "@/components/contentful-image";
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 
 export default function Home() {
   return (
@@ -11,6 +12,8 @@ export default function Home() {
 }
 
 async function Articles() {
+  "use cache";
+  cacheLife("days");
   const articles = await getArticles();
 
   return (
