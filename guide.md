@@ -8,8 +8,7 @@ This guide walks through three rendering strategies in Next.js to explain the wh
 2. **Static rendering** — Fast pages, stale content
 3. **Mixed (Cache Components)** — Fast pages and fresh content
 
-The full source lives on GitHub, and this guide starts from the `dynamic` branch:
-[https://github.com/vercel-labs/template-contentful-next](https://github.com/vercel-labs/template-contentful-next)
+The [full source](https://github.com/vercel-labs/template-contentful-next) is available on GitHub, and this guide starts from the `dynamic` branch.
 
 ---
 
@@ -152,7 +151,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 }
 ```
 
-However, the `/articles/[slug]` route renders `<ArticleContent>` which depends on the dynamic param `[slug]`. This makes the route [dynamic by default](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes#behavior), causing Next.js to fetch articles from Contentful on every request.
+However, the `/articles/[slug]` route renders `<ArticleContent>`, which depends on the dynamic parameter `[slug]`. This makes the route [dynamic by default](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes#behavior), causing Next.js to fetch articles from Contentful on every request.
 
 ### Article component
 
@@ -344,7 +343,7 @@ Your home page content might change frequently, or it might stay static for week
 
 ### Mix cached and dynamic content
 
-The article detail page uses dynamic data in the `<Views>` component, and static content in the `<ArticleContent>` component. Cache Components makes it easy to mix these strategies on a single page. Start by removing the `<Suspense>` boundary around the `ArticleContent` component.
+The article detail page uses dynamic data in the `<Views>` component and static content in the `<ArticleContent>` component. Cache Components make it easy to mix these strategies on a single page. Start by removing the `<Suspense>` boundary around the `ArticleContent` component.
 
 ```jsx
 // app/articles/[slug]/page.tsx
@@ -369,7 +368,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 }
 ```
 
-Run your development server and you will see this error: `Data that blocks navigation was accessed outside of <Suspense>`. To fix it, add `"use cache"` to the `<ArticleContent>` component.
+Run your development server and you’ll see this error: `Data that blocks navigation was accessed outside of <Suspense>`. To fix it, add `"use cache"` to the `<ArticleContent>` component.
 
 ```jsx
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
@@ -387,7 +386,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
 
 On-demand revalidation updates the page whenever a user hits Publish in Contentful. Before Cache Components, developers had to define cache tags before fetching content. The new `cacheTag` API lets you define them afterward. Fetch the content, create a unique cache tag based on the response, and use webhooks to revalidate.
 
-Add a cache tag to `ArticleContent` based on the `sys.id` of the Contentful entry. This ID is a unique value assigned to every piece of content in Contentful. `sys.id` is more stable than the slug, which may change (and potentially require redirects). Next.js recommends pairing on-demand revalidation with the `'max'` cache profile for best performance.
+Add a cache tag to `ArticleContent` based on the `sys.id` of the Contentful entry. This ID is a unique value assigned to every piece of content in Contentful. `sys.id` is more stable than the slug, which may change (and potentially require redirects). Next.js recommends pairing on-demand revalidation with the `"max"` cache profile for best performance.
 
 ```jsx
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
@@ -461,7 +460,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-`revalidateTag(entryId, 'max')` marks cached data tagged with that entry ID as stale. The next request can serve stale content immediately while fetching fresh data in the background, which gives you stale-while-revalidate behavior.
+`revalidateTag(entryId, "max")` marks cached data tagged with that entry ID as stale. The next request can serve stale content immediately while fetching fresh data in the background, which gives you stale-while-revalidate behavior.
 
 ### Configure the Contentful webhook
 
@@ -483,7 +482,7 @@ git commit -m "Add Cache Components"
 git push origin main
 ```
 
-Import the project on Vercel: [https://vercel.com](https://vercel.com)
+Import the project into Vercel: [https://vercel.com](https://vercel.com)
 
 Add these environment variables:
 
@@ -504,9 +503,9 @@ You migrated a fully dynamic application to Cache Components. You now get granul
 
 | Approach         | Speed | Freshness | Dynamic features |
 | ---------------- | ----- | --------- | ---------------- |
-| Dynamic          | Slow  | Fresh     | Work             |
+| Dynamic          | Slow  | Fresh     | Works            |
 | Static           | Fast  | Stale     | Broken           |
-| Cache Components | Fast  | Fresh     | Work             |
+| Cache Components | Fast  | Fresh     | Works            |
 
 Cache Components eliminate the need to choose between performance and freshness. Your users get instant loading, your content editors get real-time publishing, and your development team stops rebuilding the entire site for every update.
 
