@@ -34,7 +34,6 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 }
 
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
-  "use cache";
   const params = await props.params;
 
   const articles = await getArticles({
@@ -45,9 +44,6 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
   if (!articles || articles.length === 0) {
     notFound();
   }
-
-  cacheTag(articles[0].id);
-  cacheLife("max");
 
   const { title, categoryName, authorName, summary, details, articleImage } = articles[0];
 
