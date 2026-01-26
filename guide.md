@@ -375,7 +375,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
   "use cache";
   const params = await props.params;
 
-  const article = await getArticles({
+  const articles = await getArticles({
     "fields.slug": params.slug,
     limit: 1,
   });
